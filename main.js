@@ -1,78 +1,82 @@
 import inquirer from "inquirer";
 
-async function directionToMove() {
-  const movePrompt = [
-    {
-      type: "list",
-      name: "direction",
-      message: "Where do you want to go?",
-      choices: [
-        {
-          name: "Up",
-          value: { col: 0, row: -1 },
-        },
-        {
-          name: "Down",
-          value: { col: 0, row: 1 },
-        },
-        {
-          name: "Left",
-          value: { col: -1, row: 0 },
-        },
-        {
-          name: "Right",
-          value: { col: 1, row: 0 },
-        },
-      ],
-    },
-  ];
-  try {
-    const direction = await inquirer.prompt(movePrompt);
-    return await direction;
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
+class Grid {
+  constructor(rows, cols) {
+    this.rows = rows;
+    this.cols = cols;
+    this.pos = { row: 0, col: this.rows - 1 };
+    this.grid = this.generateGrid();
   }
-}
 
-// const dir = await directionToMove();
-// console.log(dir);
+  generateGrid() {
+    const newGrid = [];
+    for (let row = 0; row < this.rows; row++) {
+      newGrid[row] = [];
+      for (let col = 0; col < this.cols; col++) {
+        newGrid[row][col] = "🌲 ";
+      }
+    }
+    newGrid[this.pos.row][this.pos.col] = "🐒 ";
+    return newGrid;
+  }
 
-function generateGrid() {
-  const grid = [];
-  for (let row = 0; row < 10; row++) {
-    grid[row] = [];
-    for (let col = 0; col < 10; col++) {
-      grid[row][col] = "🌲 ";
+  drawGrid() {
+    for (let row of this.grid) {
+      let rowStr = "";
+      for (let col of row) {
+        rowStr += col;
+      }
+      console.log(rowStr);
     }
   }
-  return grid;
-}
 
-function drawGrid(grid) {
-  for (let row of grid) {
-    let rowStr = "";
-    for (let col of row) {
-      rowStr += col;
+  async directionToMove() {
+    const movePrompt = [
+      {
+        type: "list",
+        name: "direction",
+        message: "Where do you want to go?",
+        choices: [
+          { name: "Up", value: { col: 0, row: -1 } },
+          { name: "Down", value: { col: 0, row: 1 } },
+          { name: "Left", value: { col: -1, row: 0 } },
+          { name: "Right", value: { col: 1, row: 0 } },
+        ],
+      },
+    ];
+    try {
+      const direction = await inquirer.prompt(movePrompt);
+      return await direction;
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
     }
-    console.log(rowStr);
+  }
+
+  async updateGrid() {
+    const dir = await this.directionToMove();
+
+    console.log(dir);
+
+    if (true) {
+      this.grid[this.pos.row][this.pos.col] = "💢 ";
+      this.pos.row += dir.direction.row;
+      this.pos.col += dir.direction.col;
+      this.grid[this.pos.row][this.pos.col] = "🐒 ";
+    } else {
+      console.log("Can't move outside the grid..");
+    }
   }
 }
 
 async function game() {
-  const grid = generateGrid();
-  let currPosition = { row: 0, col: grid.length - 1 };
-  grid[currPosition.row][currPosition.col] = "🐒 ";
-
+  const grid = new Grid(10, 10);
+  console.clear();
+  grid.drawGrid();
   while (true) {
+    await grid.updateGrid();
     console.clear();
-    drawGrid(grid);
-    const dir = await directionToMove();
-    grid[currPosition.row][currPosition.col] = "💢 ";
-
-    currPosition.row += dir.direction.row;
-    currPosition.col += dir.direction.col;
-    grid[currPosition.row][currPosition.col] = "🐒 ";
+    grid.drawGrid();
   }
 }
 
