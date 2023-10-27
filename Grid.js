@@ -89,4 +89,4 @@ class Grid {
     this.drawGrid();
   }
 }
-export default Grid;
+export { Grid };

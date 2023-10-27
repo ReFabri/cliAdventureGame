@@ -1,4 +1,4 @@
-import Grid from "./grid.js";
+import { Grid } from "./Grid.js";
 
 async function game() {
   const grid = new Grid(10, 10);
