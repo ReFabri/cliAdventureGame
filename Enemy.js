@@ -4,6 +4,12 @@ class Enemy {
     this.attack = attack;
     this.defense = defense;
   }
-  attackPlayer() {}
-  defend() {}
 }
+
+class Spider extends Enemy {
+  constructor(hp, attack, defense) {
+    super(hp, attack, defense);
+  }
+}
+
+export { Spider };
