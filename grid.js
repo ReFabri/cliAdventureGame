@@ -5,11 +5,11 @@ class Grid {
     this.rows = rows;
     this.cols = cols;
     this.info = ["\n", "", "\n"];
-    this.pos = { row: 0, col: this.rows - 1 };
-    this.grid = this.generateGrid();
+    this.pos = { row: this.rows - 1, col: 0 };
+    this.grid = this.generateNewGrid();
   }
 
-  generateGrid() {
+  generateNewGrid() {
     const newGrid = [];
     for (let row = 0; row < this.rows; row++) {
       newGrid[row] = [];
@@ -45,10 +45,10 @@ class Grid {
         name: "direction",
         message: "Where do you want to go?",
         choices: [
-          { name: "Up", value: { col: 0, row: -1 } },
-          { name: "Down", value: { col: 0, row: 1 } },
-          { name: "Left", value: { col: -1, row: 0 } },
-          { name: "Right", value: { col: 1, row: 0 } },
+          { name: "Up", value: { row: -1, col: 0 } },
+          { name: "Down", value: { row: 1, col: 0 } },
+          { name: "Left", value: { row: 0, col: -1 } },
+          { name: "Right", value: { row: 0, col: 1 } },
         ],
       },
     ];
@@ -63,11 +63,10 @@ class Grid {
 
   async updateGrid() {
     const dir = await this.directionToMove();
-    console.log(dir);
     const newRow = this.pos.row + dir.direction.row;
     const newCol = this.pos.col + dir.direction.col;
 
-    if (this.grid[newRow] && this.grid[newCol]) {
+    if (this.grid[newRow] && this.grid[newRow][newCol]) {
       this.grid[this.pos.row][this.pos.col] = "💢 ";
       this.pos.row = newRow;
       this.pos.col = newCol;
