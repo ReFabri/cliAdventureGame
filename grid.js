@@ -1,5 +1,9 @@
 import inquirer from "inquirer";
 
+const PLAYER = "🐒";
+const FINISH = "🏆";
+const WALL = "🌲";
+const PREVIOUS = "💢";
 class Grid {
   constructor(rows, cols) {
     this.rows = rows;
@@ -14,10 +18,11 @@ class Grid {
     for (let row = 0; row < this.rows; row++) {
       newGrid[row] = [];
       for (let col = 0; col < this.cols; col++) {
-        newGrid[row][col] = "🌲 ";
+        newGrid[row][col] = WALL;
       }
     }
-    newGrid[this.pos.row][this.pos.col] = "🐒 ";
+    newGrid[this.pos.row][this.pos.col] = PLAYER;
+    newGrid[0][this.cols - 1] = FINISH;
     return newGrid;
   }
 
@@ -67,14 +72,21 @@ class Grid {
     const newCol = this.pos.col + dir.direction.col;
 
     if (this.grid[newRow] && this.grid[newRow][newCol]) {
-      this.grid[this.pos.row][this.pos.col] = "💢 ";
+      this.grid[this.pos.row][this.pos.col] = PREVIOUS;
       this.pos.row = newRow;
       this.pos.col = newCol;
-      this.grid[this.pos.row][this.pos.col] = "🐒 ";
+      this.grid[this.pos.row][this.pos.col] = PLAYER;
       this.info[1] = "";
     } else {
       this.info[1] = "Can't move outside the grid..";
     }
+  }
+
+  async newRound() {
+    await this.updateGrid();
+    console.clear();
+    this.drawInfo();
+    this.drawGrid();
   }
 }
 export default Grid;

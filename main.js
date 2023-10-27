@@ -6,10 +6,7 @@ async function game() {
   grid.drawInfo();
   grid.drawGrid();
   while (true) {
-    await grid.updateGrid();
-    console.clear();
-    grid.drawInfo();
-    grid.drawGrid();
+    await grid.newRound();
   }
 }
 
