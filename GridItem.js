@@ -1,4 +1,4 @@
-export default class GridItem {
+class GridItem {
   #wall = ["🌲", "🌳", "🌵", "🌿"];
   constructor(sprite, type = "undiscovered") {
     if (!sprite) {
@@ -10,3 +10,5 @@ export default class GridItem {
     this.type = type;
   }
 }
+
+export { GridItem };
