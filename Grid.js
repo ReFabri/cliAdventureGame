@@ -1,10 +1,13 @@
 import { GridItem } from "./GridItem.js";
 
 class Grid {
-  constructor(width, height) {
+  #currentItem;
+  constructor(width, height, playerStartX = 0, playerStartY = height - 1) {
     this.width = width;
     this.height = height;
     this.grid = [];
+    this.playerX = playerStartX;
+    this.playerY = playerStartY;
 
     for (let row = 0; row < height; row++) {
       let thisRow = [];
@@ -27,6 +30,22 @@ class Grid {
       }
       process.stdout.write("\n");
     }
+  }
+
+  movePlayerRight() {
+    if (this.playerX === this.width - 1) {
+      console.log("Cannot move right.");
+      return;
+    }
+    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
+    this.playerX++;
+
+    if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+      return;
+    }
+    this.#currentItem = new GridItem("🐒");
+    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 }
 
