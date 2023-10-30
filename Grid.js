@@ -1,4 +1,7 @@
 import { GridItem } from "./GridItem.js";
+import { ItemObject } from "./ItemObject.js";
+import { Enemy } from "./Enemy.js";
+import { Player } from "./Player.js";
 
 class Grid {
   #currentItem;
@@ -32,6 +35,29 @@ class Grid {
     }
   }
 
+  generateGridItem() {
+    const random = Math.random();
+    let object;
+
+    if (random < 0.15) {
+      object = new ItemObject("⚔️", {
+        name: "Sword",
+        attack: 3,
+        defense: 1,
+        hp: 0,
+      });
+    } else if (random < 0.35) {
+      object = new Enemy("🕷️", {
+        name: "Spider",
+        attack: 5,
+        defense: 1,
+        hp: 6,
+      });
+    } else {
+      object = new GridItem("🐾", "discovered");
+    }
+  }
+
   movePlayerRight() {
     if (this.playerX === this.width - 1) {
       console.log("Cannot move right.");
@@ -45,7 +71,8 @@ class Grid {
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
-    this.#currentItem = new GridItem("🐒");
+    this.#currentItem = this.generateGridItem();
+    this.#currentItem.describe();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -62,7 +89,8 @@ class Grid {
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
-    this.#currentItem = new GridItem("🐒");
+    this.#currentItem = this.generateGridItem();
+    this.#currentItem.describe();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -79,7 +107,8 @@ class Grid {
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
-    this.#currentItem = new GridItem("🐒");
+    this.#currentItem = this.generateGridItem();
+    this.#currentItem.describe();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -96,7 +125,8 @@ class Grid {
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
-    this.#currentItem = new GridItem("🐒");
+    this.#currentItem = this.generateGridItem();
+    this.#currentItem.describe();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 }
