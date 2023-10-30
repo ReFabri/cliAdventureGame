@@ -1,13 +1,7 @@
 import { Grid } from "./Grid.js";
 
 async function game() {
-  const grid = new Grid(10, 10);
-  console.clear();
-  grid.drawInfo();
-  grid.drawGrid();
-  while (true) {
-    await grid.newRound();
-  }
+  new Grid(5, 5);
 }
 
 game();

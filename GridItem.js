@@ -9,6 +9,16 @@ class GridItem {
     }
     this.type = type;
   }
+
+  describe() {
+    const phrases = [
+      "Coast is clear!",
+      "These surrounding look familiar..",
+      "There's not much here.",
+    ];
+    const random = Math.floor(Math.random() * phrases.length);
+    console.log(phrases[random]);
+  }
 }
 
 export { GridItem };

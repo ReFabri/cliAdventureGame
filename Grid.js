@@ -41,6 +41,7 @@ class Grid {
     this.playerX++;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
@@ -57,6 +58,7 @@ class Grid {
     this.playerX--;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
@@ -73,6 +75,7 @@ class Grid {
     this.playerY--;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
@@ -89,6 +92,7 @@ class Grid {
     this.playerY++;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
     }
@@ -97,4 +101,4 @@ class Grid {
   }
 }
 
-new Grid(5, 5);
+export { Grid };
