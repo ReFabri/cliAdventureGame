@@ -47,6 +47,54 @@ class Grid {
     this.#currentItem = new GridItem("🐒");
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
+
+  movePlayerLeft() {
+    if (this.playerX === 0) {
+      console.log("Cannot move left.");
+      return;
+    }
+    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
+    this.playerX--;
+
+    if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+      return;
+    }
+    this.#currentItem = new GridItem("🐒");
+    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+  }
+
+  movePlayerUp() {
+    if (this.playerY === 0) {
+      console.log("Cannot move up.");
+      return;
+    }
+    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
+    this.playerY--;
+
+    if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+      return;
+    }
+    this.#currentItem = new GridItem("🐒");
+    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+  }
+
+  movePlayerDown() {
+    if (this.playerY === this.height - 1) {
+      console.log("Cannot move down.");
+      return;
+    }
+    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
+    this.playerY++;
+
+    if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+      return;
+    }
+    this.#currentItem = new GridItem("🐒");
+    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
+  }
 }
 
 new Grid(5, 5);
