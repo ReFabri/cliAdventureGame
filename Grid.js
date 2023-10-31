@@ -11,6 +11,7 @@ class Grid {
     this.grid = [];
     this.playerX = playerStartX;
     this.playerY = playerStartY;
+    this.player = new Player("Player", { attack: 10, defense: 5, hp: 20 });
 
     for (let row = 0; row < height; row++) {
       let thisRow = [];
@@ -67,6 +68,42 @@ class Grid {
       this.#currentItem.describe();
       return;
     }
+    if (this.#currentItem.type === "item") {
+      this.#currentItem.describe();
+      const itemStats = this.#currentItem.getStats();
+      this.player.addStats(itemStats);
+      return;
+    }
+    this.#currentItem.describe();
+    const enemyStats = this.#currentItem.getStats();
+    const enemyName = this.#currentItem.getName();
+    const playerStats = this.player.getStats();
+
+    if (enemyStats.defense > playerStats.attack) {
+      console.log(`You Lose - ${enemyName} was too powerful!`);
+      process.exit();
+    }
+
+    let totalPlayerDamage = 0;
+
+    while (enemyStats.hp > 0) {
+      const enemyDamageTurn = playerStats.attack - enemyStats.defense;
+      const playerDamageTurn = enemyStats.attack - playerStats.defense;
+      if (enemyDamageTurn > 0) {
+        enemyStats.hp -= enemyDamageTurn;
+      }
+      if (playerDamageTurn > 0) {
+        playerStats.hp -= playerDamageTurn;
+        totalPlayerDamage += playerDamageTurn;
+      }
+    }
+    if (playerStats.hp > 0) {
+      console.log(`You Lose - ${enemyName} was too powerful!`);
+      process.exit();
+    }
+    this.player.addStats({ hp: -totalPlayerDamage });
+    console.log(`You defeated the ${enemyName}! Your updated stats:`);
+    this.player.describe();
   }
 
   movePlayerRight() {
