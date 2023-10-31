@@ -2,9 +2,11 @@ import { GridItem } from "./GridItem.js";
 import { ItemObject } from "./ItemObject.js";
 import { Enemy } from "./Enemy.js";
 import { Player } from "./Player.js";
+import { promptPlayerForDirection } from "./playerPrompts.js";
 
 class Grid {
   #currentItem;
+
   constructor(width, height, playerStartX = 0, playerStartY = height - 1) {
     this.width = width;
     this.height = height;
@@ -20,13 +22,43 @@ class Grid {
       }
       this.grid.push(thisRow);
     }
-    this.grid[height - 1][0] = new GridItem("🐒", "player");
-    this.grid[0][width - 1] = new GridItem("⭐", "win");
 
-    this.displayGrid();
+    this.grid[height - 1][0] = new GridItem("🐵", "player");
+    this.grid[0][width - 1] = new GridItem("⭐️", "win");
+
+    this.startGame();
+  }
+
+  async startGame() {
+    while (this.player.getStats().hp > 0) {
+      this.displayGrid();
+      const response = await promptPlayerForDirection();
+
+      switch (response) {
+        case "Up": {
+          this.movePlayerUp();
+          break;
+        }
+        case "Down": {
+          this.movePlayerDown();
+          break;
+        }
+        case "Left": {
+          this.movePlayerLeft();
+          break;
+        }
+        case "Right": {
+          this.movePlayerRight();
+          break;
+        }
+      }
+
+      console.log("-------------------------------------");
+    }
   }
 
   displayGrid() {
+    this.player.describe();
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
         process.stdout.write(this.grid[row][col].sprite);
@@ -48,7 +80,7 @@ class Grid {
         hp: 0,
       });
     } else if (random < 0.35) {
-      object = new Enemy("🕷️", {
+      object = new Enemy("🕷", {
         name: "Spider",
         attack: 5,
         defense: 1,
@@ -57,24 +89,31 @@ class Grid {
     } else {
       object = new GridItem("🐾", "discovered");
     }
+
+    return object;
   }
 
   executeTurn() {
     if (this.grid[this.playerY][this.playerX].type === "win") {
-      console.log("🎉 Congratulations! You reached the end of the game! 🥳");
-      process.exit();
+      console.log(`🎉 Congrats! You reached the end of the game! 🥳`);
+      process.exit(); // exit our entire program
     }
+
     if (this.#currentItem.type === "discovered") {
       this.#currentItem.describe();
       return;
     }
+
     if (this.#currentItem.type === "item") {
       this.#currentItem.describe();
       const itemStats = this.#currentItem.getStats();
-      this.player.addStats(itemStats);
+      this.player.addToStats(itemStats);
       return;
     }
+
+    // enemy
     this.#currentItem.describe();
+
     const enemyStats = this.#currentItem.getStats();
     const enemyName = this.#currentItem.getName();
     const playerStats = this.player.getStats();
@@ -85,10 +124,10 @@ class Grid {
     }
 
     let totalPlayerDamage = 0;
-
     while (enemyStats.hp > 0) {
       const enemyDamageTurn = playerStats.attack - enemyStats.defense;
       const playerDamageTurn = enemyStats.attack - playerStats.defense;
+
       if (enemyDamageTurn > 0) {
         enemyStats.hp -= enemyDamageTurn;
       }
@@ -97,11 +136,13 @@ class Grid {
         totalPlayerDamage += playerDamageTurn;
       }
     }
-    if (playerStats.hp > 0) {
+
+    if (playerStats.hp <= 0) {
       console.log(`You Lose - ${enemyName} was too powerful!`);
       process.exit();
     }
-    this.player.addStats({ hp: -totalPlayerDamage });
+
+    this.player.addToStats({ hp: -totalPlayerDamage });
     console.log(`You defeated the ${enemyName}! Your updated stats:`);
     this.player.describe();
   }

@@ -7,6 +7,7 @@ class Enemy extends GridItem {
     defense: 0,
     hp: 0,
   };
+
   constructor(sprite, stats) {
     super(sprite);
     this.type = "enemy";
@@ -29,7 +30,7 @@ class Enemy extends GridItem {
     const stats = this.#stats;
     console.log(`${this.sprite} You encountered a ${stats.name}!`);
     console.log(
-      `${stats.name}'s Stats: HP: ${stats.hp} | ATK: ${stats.attack} | DEF: ${stats.defense}`
+      `${stats.name}'s Stats: HP: ${stats.hp} ATK: ${stats.attack} DEF: ${stats.defense}`
     );
   }
 }
