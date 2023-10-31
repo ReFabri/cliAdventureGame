@@ -120,7 +120,7 @@ class Grid {
       return;
     }
     this.#currentItem = this.generateGridItem();
-    this.#currentItem.describe();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -138,7 +138,7 @@ class Grid {
       return;
     }
     this.#currentItem = this.generateGridItem();
-    this.#currentItem.describe();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -156,7 +156,7 @@ class Grid {
       return;
     }
     this.#currentItem = this.generateGridItem();
-    this.#currentItem.describe();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 
@@ -174,7 +174,7 @@ class Grid {
       return;
     }
     this.#currentItem = this.generateGridItem();
-    this.#currentItem.describe();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridItem("🐒");
   }
 }
