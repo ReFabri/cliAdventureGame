@@ -58,6 +58,17 @@ class Grid {
     }
   }
 
+  executeTurn() {
+    if (this.grid[this.playerY][this.playerX].type === "win") {
+      console.log("🎉 Congratulations! You reached the end of the game! 🥳");
+      process.exit();
+    }
+    if (this.#currentItem.type === "discovered") {
+      this.#currentItem.describe();
+      return;
+    }
+  }
+
   movePlayerRight() {
     if (this.playerX === this.width - 1) {
       console.log("Cannot move right.");
