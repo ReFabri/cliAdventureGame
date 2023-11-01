@@ -30,6 +30,7 @@ class Grid {
   }
 
   async startGame() {
+    console.clear();
     while (this.player.getStats().hp > 0) {
       this.displayGrid();
       const response = await promptPlayerForDirection();
@@ -78,6 +79,7 @@ class Grid {
   executeTurn() {
     // console.clear();
     // console.log("-------------------------------------");
+
     if (this.grid[this.playerY][this.playerX].type === "win") {
       console.log(`🎉 Congrats! You reached the end of the game! 🥳`);
       process.exit();
@@ -128,10 +130,12 @@ class Grid {
     this.player.addToStats({ hp: -totalPlayerDamage });
     console.log(`You defeated the ${enemyName}! Your updated stats:`);
     this.player.describe();
-    // console.clear();
   }
 
   movePlayer(direction) {
+    console.clear();
+    console.log("-------------------------------------");
+
     if (direction === "Right" && this.playerX === this.width - 1) {
       console.log("Cannot move right.");
       return;
@@ -157,6 +161,8 @@ class Grid {
     if (direction === "Down") this.playerY++;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      console.clear();
+      console.log("-------------------------------------");
       this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridItem("🐒");
       return;
