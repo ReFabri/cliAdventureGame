@@ -23,7 +23,7 @@ class Grid {
       this.grid.push(thisRow);
     }
 
-    this.grid[height - 1][0] = new GridItem("🐵", "player");
+    this.grid[height - 1][0] = new GridItem("🐒", "player");
     this.grid[0][width - 1] = new GridItem("⭐️", "win");
 
     this.startGame();
@@ -33,25 +33,7 @@ class Grid {
     while (this.player.getStats().hp > 0) {
       this.displayGrid();
       const response = await promptPlayerForDirection();
-
-      switch (response) {
-        case "Up": {
-          this.movePlayerUp();
-          break;
-        }
-        case "Down": {
-          this.movePlayerDown();
-          break;
-        }
-        case "Left": {
-          this.movePlayerLeft();
-          break;
-        }
-        case "Right": {
-          this.movePlayerRight();
-          break;
-        }
-      }
+      this.movePlayer(response);
 
       console.log("-------------------------------------");
     }
@@ -82,7 +64,7 @@ class Grid {
     } else if (random < 0.35) {
       object = new Enemy("🕷", {
         name: "Spider",
-        attack: 5,
+        attack: 10,
         defense: 1,
         hp: 6,
       });
@@ -94,9 +76,11 @@ class Grid {
   }
 
   executeTurn() {
+    // console.clear();
+    // console.log("-------------------------------------");
     if (this.grid[this.playerY][this.playerX].type === "win") {
       console.log(`🎉 Congrats! You reached the end of the game! 🥳`);
-      process.exit(); // exit our entire program
+      process.exit();
     }
 
     if (this.#currentItem.type === "discovered") {
@@ -111,7 +95,6 @@ class Grid {
       return;
     }
 
-    // enemy
     this.#currentItem.describe();
 
     const enemyStats = this.#currentItem.getStats();
@@ -145,69 +128,33 @@ class Grid {
     this.player.addToStats({ hp: -totalPlayerDamage });
     console.log(`You defeated the ${enemyName}! Your updated stats:`);
     this.player.describe();
+    // console.clear();
   }
 
-  movePlayerRight() {
-    if (this.playerX === this.width - 1) {
+  movePlayer(direction) {
+    if (direction === "Right" && this.playerX === this.width - 1) {
       console.log("Cannot move right.");
       return;
     }
-    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
-    this.playerX++;
-
-    if (this.grid[this.playerY][this.playerX].type === "discovered") {
-      this.grid[this.playerY][this.playerX].describe();
-      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-      return;
-    }
-    this.#currentItem = this.generateGridItem();
-    this.executeTurn();
-    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-  }
-
-  movePlayerLeft() {
-    if (this.playerX === 0) {
+    if (direction === "Left" && this.playerX === 0) {
       console.log("Cannot move left.");
       return;
     }
-    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
-    this.playerX--;
-
-    if (this.grid[this.playerY][this.playerX].type === "discovered") {
-      this.grid[this.playerY][this.playerX].describe();
-      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-      return;
-    }
-    this.#currentItem = this.generateGridItem();
-    this.executeTurn();
-    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-  }
-
-  movePlayerUp() {
-    if (this.playerY === 0) {
+    if (direction === "Up" && this.playerY === 0) {
       console.log("Cannot move up.");
       return;
     }
-    this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
-    this.playerY--;
-
-    if (this.grid[this.playerY][this.playerX].type === "discovered") {
-      this.grid[this.playerY][this.playerX].describe();
-      this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-      return;
-    }
-    this.#currentItem = this.generateGridItem();
-    this.executeTurn();
-    this.grid[this.playerY][this.playerX] = new GridItem("🐒");
-  }
-
-  movePlayerDown() {
-    if (this.playerY === this.height - 1) {
+    if (direction === "Down" && this.playerY === this.height - 1) {
       console.log("Cannot move down.");
       return;
     }
+
     this.grid[this.playerY][this.playerX] = new GridItem("🐾", "discovered");
-    this.playerY++;
+
+    if (direction === "Right") this.playerX++;
+    if (direction === "Left") this.playerX--;
+    if (direction === "Up") this.playerY--;
+    if (direction === "Down") this.playerY++;
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
       this.grid[this.playerY][this.playerX].describe();
