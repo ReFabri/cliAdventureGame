@@ -77,9 +77,6 @@ class Grid {
   }
 
   executeTurn() {
-    // console.clear();
-    // console.log("-------------------------------------");
-
     if (this.grid[this.playerY][this.playerX].type === "win") {
       console.log(`🎉 Congrats! You reached the end of the game! 🥳`);
       process.exit();
